@@ -1,0 +1,147 @@
+ma
+AttachmentPrune
+	(AttachmentVersionRowId INTEGER PRIMARY KEY)
+
+AttachmentVersions
+	(MessageId INTEGER NOT NULL,  PartId TEXT NOT NULL,  Disposition TEXT,  IsDownloaded INTEGER DEFAULT 0 CHECK (IsDownloaded IN (0, 1)),  Url TEXT)
+
+Attachments
+	(MessageId INTEGER NOT NULL,  PartId TEXT NOT NULL,  AttachmentId TEXT,  Filename TEXT,  Size INTEGER,  ContentType TEXT,  IsViewable INTEGER DEFAULT 0 CHECK (IsViewable IN (0, 1)),  IsInline INTEGER DEFAULT 0 CHECK (IsInline IN (0, 1)),  IsUploaded INTEGER DEFAULT 0 CHECK (IsUploaded IN (0, 1)),  PrevPartId TEXT,  IsOriginal INTEGER DEFAULT 0 CHECK (IsOriginal IN (0, 1)),  OrigServerId TEXT,  UploadId TEXT)
+
+CalendarAttendees
+	(MessageId INTEGER NOT NULL,  Name TEXT NOT NULL)
+
+CalendarComposeEntries
+	(MessageId INTEGER PRIMARY KEY,  Title TEXT DEFAULT "",  Location TEXT DEFAULT "",  StartDateTime TEXT DEFAULT "",  EndDateTime TEXT DEFAULT "",  IsAllDay INTEGER DEFAULT 0)
+
+CalendarEntries
+	(MessageId INTEGER PRIMARY KEY,  Title TEXT DEFAULT "",  Time TEXT DEFAULT "",  Location TEXT DEFAULT "",  Params TEXT DEFAULT "",  Organizer TEXT DEFAULT "")
+
+ConfigInfo
+	(MessageAge INTEGER DEFAULT 7,  AttachmentSize INTEGER DEFAULT 281474976710656,  DefaultValues INTEGER DEFAULT 1,  CurrentId INTEGER DEFAULT 0,  NoLabelType INTEGER DEFAULT 1)
+
+ConfigLabelIds
+	(PermId INTEGER NOT NULL,  Type INTEGER DEFAULT 1 CHECK (Type IN (0, 1, 2)))
+
+ConfigLabels
+	(LabelName TEXT NOT NULL,  Type INTEGER DEFAULT 1 CHECK (Type IN (0, 1, 2)))
+
+ContactBuckets
+	(BucketId INTEGER PRIMARY KEY,  Fingerprint TEXT NOT NULL)
+
+ContactFields
+	(FieldId INTEGER PRIMARY KEY AUTOINCREMENT,  SectionId INTEGER NOT NULL,  ContactId INTEGER NOT NULL,  Name TEXT NOT NULL,  Value TEXT)
+
+ContactLabels
+	(ContactLabelId INTEGER PRIMARY KEY AUTOINCREMENT,  HexId TEXT NOT NULL,  Name TEXT NOT NULL)
+
+ContactSections
+	(SectionId INTEGER PRIMARY KEY AUTOINCREMENT,  ContactId INTEGER NOT NULL,  Description TEXT NOT NULL)
+
+Contacts
+	(ContactId INTEGER PRIMARY KEY,  ServerId TEXT,  Name TEXT NOT NULL,  PrimaryEmail TEXT NOT NULL,  IsFrequent INTEGER CHECK(IsFrequent IN (0, 1)),  MessageCount INTEGER NOT NULL)
+
+Contacts2
+	(ContactId INTEGER PRIMARY KEY,  ServerId TEXT,  Type TEXT NOT NULL,  BucketId INTEGER NOT NULL,  Name TEXT NOT NULL,  Email TEXT NOT NULL,  Rank FLOAT NOT NULL)
+
+ContentFetch
+	(MessageId INTEGER NOT NULL,  PartId TEXT,  Disposition TEXT,  Priority INTEGER DEFAULT 0,  DateMs INTEGER,  ErrorCount INTEGER DEFAULT 0,  OrigConversationId TEXT DEFAULT "")
+
+ConversationFetch
+	(OrigConversationId TEXT PRIMARY KEY,  RequestedServerId TEXT,  LowerFetchId TEXT,  Fetched INTEGER DEFAULT 0 CHECK(Fetched IN (0,1)),  AttachmentsToFetch INTEGER DEFAULT 0,  LabelOnlyServerIds TEXT)
+
+ConversationLabels
+	(ConversationId INTEGER NOT NULL,  LabelId INTEGER NOT NULL,  Timestamp INTEGER DEFAULT 0,  NumberOfMessages INTEGER DEFAULT 0,  NumberOfUnreadMessages INTEGER DEFAULT 0,  DateMs INTEGER DEFAULT 0,  DisableTrigger INTEGER DEFAULT 0,  Valid INTEGER DEFAULT 1 CHECK(Valid in (0,1)))
+
+ConversationViews
+	(ConversationId INTEGER NOT NULL,  Type INTEGER NOT NULL,  ServerId TEXT DEFAULT NULL,  DateMs INTEGER DEFAULT 0,  FirstDateMs INTEGER DEFAULT 0,  MessageCount INTEGER DEFAULT 0,  PersonalLevel INTEGER DEFAULT 0,  DraftCount INTEGER DEFAULT 0,  IsUnread INTEGER DEFAULT 0,  IsTodo INTEGER DEFAULT 0,  UnreadDateMs INTEGER DEFAULT 0,  SnippetHtml TEXT DEFAULT "",  SnippetDateMs INTEGER DEFAULT 0,  SenderListHtml TEXT DEFAULT "",  Subject TEXT)
+
+Conversations
+	(ConversationId INTEGER PRIMARY KEY AUTOINCREMENT,  ServerId TEXT DEFAULT NULL,  OrigConversationId TEXT,  ModifyDateMs INTEGER DEFAULT 0,  DateMs INTEGER DEFAULT 0,  FirstDateMs INTEGER DEFAULT 0,  UnreadDateMs INTEGER DEFAULT 0,  Rationale INTEGER DEFAULT 1,  TotalMessageCount INTEGER DEFAULT 0,  MessageCount INTEGER DEFAULT 0,  PersonalLevel INTEGER DEFAULT 0,  DraftCount INTEGER DEFAULT 0,  IsUnread INTEGER DEFAULT 0,  IsTodo INTEGER DEFAULT 0,  LocalCount INTEGER DEFAULT 0,  AttachmentHtml TEXT,  SnippetHtml TEXT,  SnippetDateMs INTEGER DEFAULT 0,  SenderListHtml TEXT DEFAULT "",  NumBodies INTEGER DEFAULT 0,  Subject TEXT,  Valid INTEGER DEFAULT 1)
+
+DataArrays
+	(Type STRING NOT NULL PRIMARY KEY,  TypeOrder INTEGER DEFAULT -1,  Value STRING NOT NULL DEFAULT "",  TimeStamp INTEGER DEFAULT 0)
+
+FtCleanUp
+	(FtRowId INTEGER PRIMARY KEY)
+
+History
+	(OperationId INTEGER PRIMARY KEY AUTOINCREMENT,  Action TEXT NOT NULL,  MessageId Number,  ServerId TEXT DEFAULT "0",  PermId INTEGER DEFAULT 0,  Value1 TEXT,  Value2 TEXT,  HandledTime INTEGER)
+
+Impressions
+	(Name TEXT NOT NULL,  Count INTEGER DEFAULT 0,  Version INTEGER DEFAULT 0)
+
+InlineAttachmentUphillResults
+	(ServerId TEXT NOT NULL,  AttachmentId TEXT NOT NULL,  PartId TEXT NOT NULL)
+
+InlineAttachments
+	(MessageId INTEGER NOT NULL,  UploadId TEXT NOT NULL)
+
+LabeledContacts
+	(HexId TEXT NOT NULL,  ContactId INTEGER NOT NULL,  Email TEXT)
+
+Labels
+	(LabelId INTEGER PRIMARY KEY AUTOINCREMENT,  PermId INTEGER DEFAULT 0,  Label TEXT UNIQUE,  LcLabel TEXT UNIQUE,  Internal INTEGER DEFAULT 0 CHECK(Internal IN (0, 1)),  Timestamp INTEGER DEFAULT 0,  DisplayTimestamp INTEGER DEFAULT 0,  Color INTEGER DEFAULT 0,  Visibility INTEGER DEFAULT 1,  IsVisibleInMessageList INTEGER DEFAULT 1 CHECK(IsVisibleInMessageList IN (0, 1)),  Favorite INTEGER DEFAULT 1 CHECK(Favorite IN (0, 1)),  SortOrder INTEGER DEFAULT -1,  IsImapHidden INTEGER DEFAULT 0 CHECK(IsImapHidden IN (0, 1)),  NumberOfConversations INTEGER DEFAULT 0,  NumberOfUnreadConversations INTEGER DEFAULT 0,  NumberOfLocalConversations INTEGER DEFAULT 0,  NumberOfLocalUnreadConversations INTEGER DEFAULT 0)
+
+Mappings
+	(ClientGeneratedId TEXT PRIMARY KEY,  ServerId TEXT,  DraftId TEXT DEFAULT "")
+
+MessageFetch
+	(OrigConversationId TEXT,  ServerId TEXT PRIMARY KEY)
+
+MessageLabels
+	(MessageId INTEGER NOT NULL,  LabelId INTEGER NOT NULL,  Valid INTEGER DEFAULT 1 CHECK(Valid in (0, 1)))
+
+Messages
+	(MessageId INTEGER PRIMARY KEY AUTOINCREMENT,  ConversationId INTEGER NOT NULL,  ServerId TEXT NOT NULL,  Timestamp INTEGER DEFAULT 0,  RefMsgId TEXT,  DateMs INTEGER,  ReceivedDateMs INTEGER,  IsInbox INTEGER DEFAULT 0,  IsOutbox INTEGER DEFAULT 0,  IsTrash INTEGER DEFAULT 0,  IsSpam INTEGER DEFAULT 0,  IsUnread INTEGER DEFAULT 0,  IsSent INTEGER DEFAULT 0,  IsDraft INTEGER DEFAULT 0,  IsTodo INTEGER DEFAULT 0,  IsLocal INTEGER DEFAULT 0,  IsHtml INTEGER DEFAULT 0 CHECK(IsHtml IN (0, 1)),  IsTemporary INEGER DEFAULT 0,  PersonalLevel INTEGER DEFAULT 0,  HasBody INTEGER CHECK(HasBody IN (0, 1)),  NumberOfAttachments INTEGER DEFAULT 0,  FetchScheduled INTEGER DEFAULT 0 CHECK(FetchScheduled IN (0, 1)),  SnippetHtml TEXT,  Refetch INTEGER DEFAULT 0 CHECK(Refetch IN (0, 1)),  ShowNeverSpam INTEGER DEFAULT 0,  ReplyToAddresses TEXT,  ReplyByChatThreadId TEXT,  Valid INTEGER DEFAULT 1 CHECK (Valid IN (0, 1)),  HasExternalImages INTEGER DEFAULT 0 CHECK (HasExternalImages IN (0, 1)),  PickerDraftContent TEXT,  Rationale INTEGER DEFAULT 0)
+L TABLE MessagesFT USING FTS2 (Subject,  Body,  FromAddressName,  FromAddressEmail,  FromAddress,  ToAddresses,  CcAddresses,  BccAddresses)
+L TABLE MessagesFTExtra USING FTS2 (MailListInfo)
+MessagesFTExtra_content(c0MailListInfo)
+MessagesFTExtra_segdir(  level integer,  idx integer,  start_block integer,  leaves_end_block integer,  end_block integer,  root blob,  primary key(level, idx))
+MessagesFTExtra_segments(block blob)
+MessagesFT_content(c0Subject, c1Body, c2FromAddressName, c3FromAddressEmail, c4FromAddress, c5ToAddresses, c6CcAddresses, c7BccAddresses)
+MessagesFT_segdir(  level integer,  idx integer,  start_block integer,  leaves_end_block integer,  end_block integer,  root blob,  primary key(level, idx))
+MessagesFT_segments(block blob)
+
+MsgAddress
+	(MessageId INTEGER NOT NULL,  AddressId INTEGER NOT NULL,  Role INTEGER CHECK(Role IN (0,1,2,3,4)))
+
+PendingHistory
+	(Id INTEGER PRIMARY KEY AUTOINCREMENT,  Action TEXT NOT NULL,  MessageId Number,  ServerId TEXT DEFAULT "0",  PermId INTEGER DEFAULT 0,  Value1 TEXT,  Value2 TEXT,  HoldUntil INTEGER DEFAULT 0)
+
+Preferences
+	(Name TEXT NOT NULL PRIMARY KEY,  VALUE TEXT)
+
+StateInfo
+	(ClientId INTEGER NOT NULL,  MappedIdCounter INTEGER NOT NULL,  FirstLoad INTEGER DEFAULT 1,  ServerMode TEXT)
+
+Statistics
+	(Value TEXT NOT NULL)
+
+StatusInfo
+	(MessagesFetched INTEGER DEFAULT 0,  ConversationsToFetch INTEGER DEFAULT 0,  ConversationsFetched INTEGER DEFAULT 0,  BodiesToFetch INTEGER DEFAULT 0,  BodiesFetched INTEGER DEFAULT 0,  AttachmentsToFetch INTEGER DEFAULT 0,  AttachmentsFetched INTEGER DEFAULT 0,  FullConversationsToFetch INTEGER DEFAULT 0)
+
+StoreVersionInfo
+	(StoreName TEXT NOT NULL PRIMARY KEY,  Version TEXT NOT NULL)
+
+SyncInfo
+	(ClientId INTEGER NOT NULL,  ShouldSync INTEGER DEFAULT 1,  PauseTime NUMBER DEFAULT 0,  ActiveSyncId INTEGER DEFAULT 0,  ActiveSyncPingTime INTEGER DEFAULT 0,  LastLoadedConfigId INTEGER DEFAULT 0,  LastHandledServerOperationId INTEGER DEFAULT 0,  UpperConversationFetchId TEXT DEFAULT "0",  LowerConversationFetchId TEXT DEFAULT "0",  NextContactFetchId TEXT DEFAULT NULL,  NextContactLabelFetchId TEXT DEFAULT NULL,  EarliestSyncToDate INTEGER DEFAULT 0,  LastCompletedMainSync INTEGER DEFAULT 0,  FirstBackwardSyncComplete INTEGER DEFAULT 0,  SyncState TEXT,  HighestAckedClientOpId TEXT DEFAULT "0")
+
+TmpAttachmentUrls
+	(Url TEXT NOT NULL,  Timestamp INTEGER DEFAULT 0)
+
+UphillSyncResults
+	(OldId TEXT PRIMARY KEY,  NewId TEXT NOT NULL,  Timestamp INTEGER DEFAULT 0)
+
+VerificationErrors
+	(DateMs INTEGER,  Type TEXT,  Item TEXT,  Error TEXT)
+
+VerifyConversationLists
+	(RequestId INTEGER PRIMARY KEY AUTOINCREMENT,  Query TEXT)
+
+VerifyConversations
+	(RequestId INTEGER PRIMARY KEY AUTOINCREMENT,  OrigConversationId TEXT)
+
+VoiceMailEntries
+	(MessageId INTEGER PRIMARY KEY,  FromInfo TEXT DEFAULT "",  Length TEXT DEFAULT "",  Url TEXT DEFAULT "",  ChatProduct TEXT DEFAULT "",  ChatUrl TEXT DEFAULT "")
+sqlite_sequence(name,seq)

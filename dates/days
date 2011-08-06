@@ -1,0 +1,38 @@
+DAYS : Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+MONTHS : January, February, March, April, May, June, July, August, September, October, November, December
+
+Day : day, da
+Before : before, befor, bef, b4, befo
+After : after, aftr, aft, afte,
+Yesterday : yesterday, yest, yestday
+Tomorrow : tomorrow, tomo, tomor, tomm, tom, tomor
+Today : today, toda
+
+Monday : monday, monda, mon, mond
+Tuesday : tuesday, tue, tues
+Wednesday : wednesday, wed, wedn
+Thursday : thursday, thurs, thu
+Friday : friday, frid, frida, fri
+Saturday : sat, satur
+Sunday : sun, sund, sunda
+
+Dig : 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
+Th : th, t
+
+January : jan, janu, janry
+February : feb, febr, febry
+March : march, marc, mar
+April : apr, aprl
+May : may
+June : jun
+July : july, jul
+August : aug, augst
+September : sept, sep, septbr
+October : oct, octobr, octr
+November : nov, novm, novmbr
+December : dec, decbr, decb
+
+DATE: MONTHS _ Dig th, MONTHS _ Dig _ th, Dig _ th, Dig th, MONTH Dig, w3 DAYS
+
+
+
